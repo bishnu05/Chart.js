@@ -27,6 +27,11 @@
     </style>
   </head>
   <body>
+       <input type="text" class="month" placeholder="month">
+       <input type="number" class="attendance" placeholder="attendence">
+       <input type="number" class="performance" placeholder="performance">
+       <button class="add">Add</button>
+
     <div class="chartCard">
       <div class="chartBox">
         <canvas id="myChart"></canvas>
@@ -76,7 +81,24 @@
     const myChart = new Chart(
       document.getElementById('myChart'),
       config);
-      
+      document.querySelector(".add").addEventListener("click", () => {
+        let month = document.querySelector(".month").value;
+        let attendance = document.querySelector(".attendance").value;
+        let performance = document.querySelector(".performance").value;
+
+        addData(month, attendance, performance);
+      });
+      function addData(label, attendance, performance) {
+        myChart.data.labels.push(label);
+        myChart.data.datasets.forEach((dataset, i) => {
+          if (i == 0) {
+            dataset.data.push(attendance);
+          } else {
+            dataset.data.push(performance);
+          }
+        });
+        myChart.update();
+      }
     </script>
 
   </body>
