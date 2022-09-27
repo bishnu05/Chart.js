@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chart.js</title>
+    <style>
+      /* * {
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+      } */
+      .chartCard {
+        width: 98%;
+        background: rgba(255, 26, 104, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .chartBox {
+        width: 98%;
+        /* padding: 20px; */
+        border-radius: 20px;
+        border: solid 3px rgb(187, 121, 126);
+        background: white;
+      }
+    </style>
+  </head>
+  <body>
+       <input type="text" class="month" placeholder="month">
+       <input type="number" class="attendance" placeholder="attendence">
+       <input type="number" class="performance" placeholder="performance">
+       <button class="add">Add</button>
+     <button onclick="removeDataset()">Remove</button>
+    <div class="chartCard">
+      <div class="chartBox">
+        <canvas id="myChart"></canvas>
+      </div>
+    </div>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+    // setup 
+    const data = {
+      labels: ['January', 'Febuary', 'March', 'April', 'May', 'June','July'],
+      datasets: [{
+        label: 'Attendence',
+        data: [100,45,60,80,66,70,80],
+        backgroundColor: colorGenerator(257),
+        borderColor: "#f8c596",
+        borderWidth: 1
+      },{
+        label: 'Performance',
+        data: [80,50,60,80,77,80,90],
+        backgroundColor: colorGenerator(257),
+        borderColor: "#ff3320",
+        borderWidth: 1
+      }
+    ]
+    };
+
+    // config 
+    const config = {
+      type: 'bar',
+      data,
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    };
+     
+    function random(num) {
+        return Math.floor(Math.random() * num);
+      }
+      function colorGenerator(num) {
+        return `rgba(${random(248)}${random(197)},${random(150)},${random(2)})`;
+      }
+    // render init block
+    const myChart = new Chart(
+      document.getElementById('myChart'),
+      config);
+      document.querySelector(".add").addEventListener("click", () => {
+        let month = document.querySelector(".month").value;
+        let attendance = document.querySelector(".attendance").value;
+        let performance = document.querySelector(".performance").value;
+
+        addData(month, attendance, performance);
+      });
+      function addData(label, attendance, performance) {
+        myChart.data.labels.push(label);
+        myChart.data.datasets.forEach((dataset, i) => {
+          if (i == 0) {
+            dataset.data.push(attendance);
+          } else {
+            dataset.data.push(performance);
+          }
+        });
+        myChart.update();
+      }
+
+       function removeDataset(){
+         myChart.data.labels.pop()
+         myChart.update()
+       }
+    </script>
+
+  </body>
+</html>
