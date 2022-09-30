@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>LLD</h1>
+</body>
+</html>
+<script>
+
+class Ipl {
+    constructor(type,gender, age, category) {
+      this._type=type;
+      this._gender = gender;
+      this._age = age;
+      this._category = category;
+    }
+  
+    get type() {
+      return this._type;
+    }
+  
+    set gender(value) {
+      this._type = value;
+    }
+    
+  }
+  
+  
+  class General extends Ipl {
+    constructor(age, gender,category) {
+      super("VIP",age, gender,category);
+    }
+  }
+  
+  
+  
+  class VIP extends Ipl {
+    constructor(age, gender,category) {
+      super("VIP", age, gender,category);
+    }
+  }
+  
+  class VVIP extends Ipl {
+    constructor(age, gender,category) {
+      super("VVIP", age, gender,category);
+    }
+  }
+  
+  //getter and setter methods
+  
+  let c1 = new General("22","male", "ipl");
+  
+  console.log("c1:", c1);
+  
+  class Vehicle{
+       run(){
+           console.log("Vehicle is running")
+       }
+}
+   class Car extends Vehicle {
+       run(){
+           console.log("car is running")
+       }
+   }
+
+   class Truck extends Car {
+       run(){
+           console.log("truck is running")
+       }
+   }
+    class Bike extends Truck{
+      run(){
+        console.log("Bike is running")
+      }
+    }
+   
+    let v1= new Vehicle();
+
+    let v2=new Car();
+    
+     let v3= new Truck();
+
+     v3.run();
+
+
+
+
+
+  //Individual  slot
+  class Slot {
+    constructor(type, number) {
+      this.number = number;
+      this.type = type;
+      this._isBooked = false;
+    }
+  
+    get isBooked() {
+      return this._isBooked;
+    }
+  
+    set isBooked(value) {
+      this._isBooked = value;
+    }
+  }
+  
+  //Individual Floors
+  
+  class SittingFloor {
+    constructor(floornumber, maxFloor) {
+      this.floornumber = floornumber;
+      this._sittingspots = []; 
+  
+      
+      //we categorized each floor
+      for (let i = 0; i < maxFloor; i++) {
+        if (i === 0) {
+          //push Truck slots
+  
+          this._sittingspots.push(new Slot("General", i));
+        } else if (i === 1) {
+          //push bikes slots
+  
+          this._sittingspots.push(new Slot("VIP", i));
+        } else {
+          //push cars slots
+          this._sittingspots.push(new Slot("VVIP", i));
+        }
+      }
+    }
+  
+    get sittingspots() {
+      return this._sittingspots;
+    }
+  }
+  
+  
+  
+  class SittingLot {
+    constructor(number) {
+      this._floors = [];
+      this._numberofFloors = number;
+  
+      for (let i = 0; i < number; i++) {
+        this._floors[i] = new SittingFloor(i, number);
+      }
+    }
+  
+    get numberofFloors() {
+      return this._numberofFloors;
+    }
+  
+    get floors() {
+      return this._floors;
+    }
+  
+    set floors(value) {
+      this._floors = value;
+    }
+  
+    sitPosition(Position) {
+      let slot = this.findSlot(Position.type); //car, bike, truck
+  
+      if (!slot) {
+        console.log("No slots");
+        return false;
+      }
+  
+      this.bookslot(slot);
+  
+      let ticket = new Ticket(slot.floornumber, slot.slot.number);
+      console.log("ticket is issued:", ticket);
+    }
+  
+    findSlot(type) {
+      //floors - 0 -> 0,1,2
+      //floor - 1 -> 0,1,2
+  
+      //show me all the slots
+      for (let i = 0; i < this._numberofFloors; i++) {
+        for (let slot of this._floors[i]._sittingspots) {
+          if (slot.type === type && !slot._isBooked) {
+            return { floornumber: i, slot: slot };
+          }
+        }
+      }
+  
+      return false;
+    }
+  
+    bookslot(slot) {
+      slot.slot.isBooked = true;
+      console.log("slot is booked:", slot);
+  
+      return true;
+    }
+  }
+  
+  class Ticket {
+    constructor(floorNumber, slotNumber) {
+      this.floorNumber = floorNumber;
+      this.slotNumber = slotNumber;
+      this.issuedAt = new Date();
+    }
+  }
+  
+  let p1 = new SittingLot(3);
+  
+  let b1 = new VIP("22","male", "T20");
+  
+  p1.sitPosition(b1);
+  
+  
+
+</script>
